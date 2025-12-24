@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotFusion Documentation | Technical Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #06b6d4; /* Cyan from your source */
+            --primary-dark: #0891b2;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --bg-body: #ffffff;
+            --bg-sidebar: #f9fafb;
+            --border: #e5e7eb;
+            --code-bg: #f3f4f6;
+            --code-text: #1f2937;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background: var(--bg-body);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            top: 0;
+            left: 0;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .brand span { color: var(--primary); }
+
+        .nav-group { margin-bottom: 1.5rem; }
+        .nav-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.4rem 0;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* --- Main Content --- */
+        .content {
+            margin-left: 280px;
+            padding: 4rem 5rem;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 1rem; }
+        h2 { font-size: 1.75rem; font-weight: 600; margin-top: 3rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--text-main); }
+        
+        p { margin-bottom: 1.25rem; color: var(--text-muted); }
+        
+        ul, ol { margin-bottom: 1.5rem; color: var(--text-muted); padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+
+        /* --- Code Blocks --- */
+        pre {
+            background: #1e1e1e; /* Dark theme for code blocks only */
+            color: #e5e7eb;
+            padding: 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+
+        code {
+            background: var(--code-bg);
+            color: var(--primary-dark);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+        }
+        
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* --- Components --- */
+        .callout {
+            background: #ecfeff;
+            border-left: 4px solid var(--primary);
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .callout-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-get { background: #dbeafe; color: #1e40af; }
+        .badge-post { background: #dcfce7; color: #166534; }
+        .badge-header { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        th { background: var(--bg-sidebar); font-weight: 600; }
+
+        footer {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        footer a { color: var(--primary-dark); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .content { margin-left: 0; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <a href="#" class="brand"><span>Bot</span>Fusion Docs</a>
+        
+        <div class="nav-group">
+            <div class="nav-header">Introduction</div>
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#getting-started" class="nav-link">Getting Started</a>
+            <a href="#authentication" class="nav-link">Authentication</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-header">Dashboard</div>
+            <a href="#bot-management" class="nav-link">Bot Management</a>
+            <a href="#broadcasting" class="nav-link">Broadcasting</a>
+            <a href="#file-uploads" class="nav-link">Importing Users</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-header">Integration</div>
+            <a href="#autoup-system" class="nav-link">AutoUp System</a>
+            <a href="#generating-keys" class="nav-link">Connection Keys</a>
+            <a href="#api-reference" class="nav-link">API Reference</a>
+            <a href="#rate-limits" class="nav-link">Rate Limits</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-header">Plans & Support</div>
+            <a href="#premium-plans" class="nav-link">Premium Plans</a>
+            <a href="#error-codes" class="nav-link">Error Codes</a>
+            <a href="#faq" class="nav-link">FAQ</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        
+        <section id="overview">
+            <h1>BotFusion Documentation</h1>
+            <p>Welcome to the official technical documentation for BotFusion. This platform allows you to manage multiple Telegram bots, aggregate user bases, and broadcast messages (text, image, video) to thousands of users simultaneously.</p>
+            <p>Our system is designed for high-throughput messaging and seamless user synchronization via the <strong>AutoUp</strong> API.</p>
+        </section>
+
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+            <p>To start using BotFusion, you need a Telegram account and at least one Bot Token from BotFather.</p>
+            
+            <h3>1. Sign Up</h3>
+            <ol>
+                <li>Navigate to the signup page.</li>
+                <li>Enter your email, desired password, and your <strong>Telegram User ID</strong>.</li>
+                <li>You can find your Telegram ID by messaging our <a href="https://t.me/authentcastbot" target="_blank">Auth Bot</a> (`/start`).</li>
+            </ol>
+
+            <h3>2. Verification</h3>
+            <p>For security, we use Telegram-based 2FA. Upon signup, an OTP (One-Time Password) is sent to your Telegram account via our Auth Bot. Enter this code to verify your account.</p>
+        </section>
+
+        <section id="bot-management">
+            <h2>Bot Management</h2>
+            <p>Once logged in, the Dashboard is your mission control.</p>
+
+            <h3>Adding a Bot</h3>
+            <p>Enter your Bot Token (provided by @BotFather) into the "Add a New Bot" panel. The system will:</p>
+            <ul>
+                <li>Validate the token with Telegram APIs.</li>
+                <li>Verify your plan limits (Free plan: max 10 bots).</li>
+                <li>Fetch the bot's username automatically.</li>
+            </ul>
+
+            <div class="callout">
+                <span class="callout-title">Bot Ownership</span>
+                You must be the owner or administrator of the bot you are adding. The system validates ownership during critical operations like AutoUp Integration.
+            </div>
+        </section>
+
+        <section id="file-uploads">
+            <h2>Importing Users</h2>
+            <p>You can import existing user lists into BotFusion using file uploads.</p>
+            <ul>
+                <li><strong>Supported Formats:</strong> <code>.txt</code>, <code>.csv</code>, <code>.json</code></li>
+                <li><strong>Format:</strong> The file is parsed via regex for any string of 5+ digits. You do not need a strict CSV format; a simple list of IDs works perfectly.</li>
+                <li><strong>Processing:</strong> Files are processed in the background. You can navigate away while the "Scanning..." status is active.</li>
+            </ul>
+        </section>
+
+        <section id="broadcasting">
+            <h2>Broadcasting</h2>
+            <p>The core feature of BotFusion is sending mass messages.</p>
+
+            <h3>Supported Content Types</h3>
+            <ul>
+                <li><strong>Text:</strong> Plain text or HTML formatted messages.</li>
+                <li><strong>Image:</strong> JPG/PNG files (Max 10MB) + Caption.</li>
+                <li><strong>Video:</strong> MP4 files (Max 10MB) + Caption.</li>
+            </ul>
+
+            <h3>Inline Buttons</h3>
+            <p>You can add interactive buttons to your messages. These are rendered as Telegram Inline Keyboard buttons. Each button requires a <strong>Label</strong> and a valid <strong>URL</strong>.</p>
+
+            <h3>Stop Broadcast</h3>
+            <p>If you made a mistake, you can click the red <strong>Stop Broadcast</strong> button in the live status panel. Note that messages already sent to the Telegram API cannot be recalled.</p>
+        </section>
+
+        <section id="autoup-system">
+            <h2>AutoUp Integration</h2>
+            <p><strong>AutoUp</strong> is our proprietary webhook-style system that allows your bots to automatically sync new users to BotFusion in real-time. This eliminates the need for manual file uploads.</p>
+
+            <h3>How it Works</h3>
+            <ol>
+                <li>A user starts your bot on Telegram.</li>
+                <li>Your bot code sends a POST request to our <code>/autoup</code> endpoint.</li>
+                <li>We verify the request using your <strong>Connection Key</strong>.</li>
+                <li>The user ID is instantly added to your database.</li>
+            </ol>
+        </section>
+
+        <section id="generating-keys">
+            <h2>Connection Keys</h2>
+            <p>To use AutoUp, you need a Connection Key. This key maps API requests to your specific account.</p>
+            <ol>
+                <li>Go to the dashboard and click <strong>AutoUp Integration</strong>.</li>
+                <li>Click <strong>Generate Connection Key</strong>.</li>
+                <li>Copy the key (Format: <code>acct_xxxxxxxxxxxxxxxx</code>).</li>
+            </ol>
+            <div class="callout">
+                <span class="callout-title">Security Warning</span>
+                This key allows write-access to your user lists. Do not share it publicly. If compromised, revoke it immediately from the AutoUp page.
+            </div>
+        </section>
+
+        <section id="api-reference">
+            <h2>API Reference</h2>
+            <p>Use this endpoint in your bot's code (Python, Node.js, PHP, etc.).</p>
+
+            <h3>Sync User Endpoint</h3>
+            <p><span class="badge badge-post">POST</span> <code>/autoup</code></p>
+
+            <h4>Headers</h4>
+            <table>
+                <tr>
+                    <th>Header</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-header">X-CONNECTION-KEY</span></td>
+                    <td><code>acct_...</code></td>
+                    <td>Your unique connection key.</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-header">Content-Type</span></td>
+                    <td><code>application/json</code></td>
+                    <td>Required.</td>
+                </tr>
+            </table>
+
+            <h4>Request Body</h4>
+            <pre><code>{
+  "bot_username": "@my_awesome_bot",
+  "user_id": 123456789
+}</code></pre>
+
+            <h4>Success Response (200 OK)</h4>
+            <pre><code>{
+  "status": "ok",
+  "bot": "@my_awesome_bot",
+  "user_id": 123456789
+}</code></pre>
+
+            <h4>Example Implementation (Python)</h4>
+            <pre><code>import requests
+
+def sync_user_to_dashboard(user_id, bot_username):
+    url = "https://your-domain.com/autoup"
+    headers = {
+        "X-CONNECTION-KEY": "acct_a1b2c3d4e5f6",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "bot_username": bot_username,
+        "user_id": user_id
+    }
+    
+    try:
+        requests.post(url, json=payload, headers=headers, timeout=2)
+    except:
+        pass # Fail silently so bot doesn't crash</code></pre>
+        </section>
+
+        <section id="rate-limits">
+            <h2>Rate Limits</h2>
+            <p>To ensure stability, the AutoUp API enforces strict rate limiting.</p>
+            <ul>
+                <li><strong>Limit:</strong> 20 requests per second.</li>
+                <li><strong>Scope:</strong> Per Connection Key.</li>
+                <li><strong>Behavior:</strong> If exceeded, the API returns <code>429 Too Many Requests</code>.</li>
+            </ul>
+        </section>
+
+        <section id="premium-plans">
+            <h2>Premium Plans</h2>
+            <p>BotFusion offers a "Free Forever" tier and Premium tiers for power users.</p>
+
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Free Plan</th>
+                    <th>Premium Plan</th>
+                </tr>
+                <tr>
+                    <td>Max Bots</td>
+                    <td>10</td>
+                    <td><strong>Unlimited</strong></td>
+                </tr>
+                <tr>
+                    <td>Users per Bot</td>
+                    <td>2,000</td>
+                    <td><strong>Unlimited</strong></td>
+                </tr>
+                <tr>
+                    <td>Support</td>
+                    <td>Standard</td>
+                    <td>Priority</td>
+                </tr>
+            </table>
+
+            <h3>How to Upgrade</h3>
+            <p>Navigate to the <strong>Pricing</strong> page from the dashboard footer. Select a plan (1 Month, 3 Months, or 1 Year) and click "Request Plan". An administrator will contact you via Telegram for payment verification and issue a <strong>Redeem Code</strong>.</p>
+        </section>
+
+        <section id="error-codes">
+            <h2>Error Codes</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Meaning</th>
+                    <th>Solution</th>
+                </tr>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Missing or invalid <code>X-CONNECTION-KEY</code>.</td>
+                </tr>
+                <tr>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>The bot username does not belong to your account. Add the bot to your dashboard first.</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>Not Found</td>
+                    <td>Endpoint incorrect or Bot/User validaton failed.</td>
+                </tr>
+                <tr>
+                    <td>429</td>
+                    <td>Rate Limit</td>
+                    <td>You are sending more than 20 users/sec. Implement a queue in your bot.</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="faq">
+            <h2>FAQ</h2>
+            
+            <h3>Why is my broadcast stuck?</h3>
+            <p>Broadcasts may pause if Telegram returns rate limit errors (429). Our system automatically backs off and retries. If a task is "stopped" by the user, it cannot be resumed.</p>
+
+            <h3>Can I delete a user?</h3>
+            <p>Currently, the API only supports <strong>adding</strong> users. User deletion must be handled by resetting the bot data in the dashboard (Delete Bot -> Add Bot).</p>
+
+            <h3>Is my data secure?</h3>
+            <p>Yes. All requests are authenticated via JWT or Connection Keys. User IDs are stored in a secure MongoDB cluster.</p>
+        </section>
+
+        <footer>
+            <div>
+                &copy; 2025 BotFusion. All rights reserved.
+            </div>
+            <div>
+                <a href="#overview">Documentation</a> &nbsp;|&nbsp; 
+                <a href="#autoup-system">AutoUp</a> &nbsp;|&nbsp; 
+                <a href="#api-reference">API</a>
+            </div>
+        </footer>
+    </main>
+
+</body>
+</html>
