@@ -7,6 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- PrismJS Dark Theme & Toolbar CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
+    
     <style>
         :root {
             --primary: #06b6d4; /* Cyan */
@@ -149,14 +154,14 @@
 
         /* --- Code Blocks --- */
         pre {
-            background: #1e1e1e;
-            color: #e5e7eb;
-            padding: 1.25rem;
+            background: #1e1e1e !important;
+            color: #e5e7eb !important;
+            padding: 1.25rem !important;
             border-radius: 8px;
             overflow-x: auto;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
-            margin: 1.5rem 0;
+            margin: 1.5rem 0 !important;
             border: 1px solid var(--border);
             line-height: 1.5;
         }
@@ -271,6 +276,58 @@
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 15;
         }
 
+        /* --- PrismJS Copy Button Positioning & Styling --- */
+        .code-toolbar {
+            position: relative; /* Prism wrapper */
+        }
+
+        /* Copy button - matches your theme */
+        div.code-toolbar > .toolbar {
+            position: absolute !important;
+            top: 0.75rem !important;
+            right: 0.75rem !important;
+            opacity: 1 !important;
+        }
+
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button {
+            background: var(--text-main) !important; /* #111827 */
+            color: white !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 6px !important;
+            padding: 0.4rem 0.75rem !important;
+            font-size: 0.8rem !important;
+            font-family: 'Inter', sans-serif !important;
+            cursor: pointer !important;
+            font-weight: 500 !important;
+            opacity: 0.9 !important;
+            transition: all 0.2s ease !important;
+            box-shadow: none !important;
+        }
+
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button:hover {
+            background: var(--primary-dark) !important; /* #0891b2 */
+            opacity: 1 !important;
+            transform: translateY(-1px) !important;
+        }
+
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button:active {
+            transform: translateY(0) !important;
+        }
+
+        /* Hide default button text, show icon */
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button span {
+            display: none !important;
+        }
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button::after {
+            content: "📋" !important;
+            font-size: 0.9rem !important;
+        }
+
+        /* Copied State Icon Update */
+        div.code-toolbar > .toolbar button.copy-to-clipboard-button[data-copy-state="copy-success"]::after {
+            content: "✅" !important;
+        }
+
         /* --- Responsive --- */
         @media (max-width: 1200px) {
             .toc-sidebar { display: none; }
@@ -300,7 +357,13 @@
     </style>
 </head>
 <body>
-
+  <!-- Scripts for PrismJS (Core, Languages, Toolbar, and Copy-to-Clipboard) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+  
     <!-- Mobile Header with Hamburger -->
     <header class="mobile-header">
         <button class="hamburger-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
@@ -508,7 +571,7 @@
         <!-- ================= API & INTEGRATION ================= -->
         <section id="api-auth">
             <h2>Connection Keys & Authentication</h2>
-            <h3 style="color: #0891b2; word-break: break-all;">https://botfusion.onrender.com/autoup</h3>
+            <h3 style="color: #0891b2; word-break: break-all;">https://botfusion.onrender.com/&lt;available-endpoint&gt;</h3>
             <p>To use any BotFusion API (AutoUp, Anomaly Detection, or GenQR), you need a Connection Key. This key maps API requests securely to your account.</p>
             <ol>
                 <li>Go to the dashboard and navigate to <strong>API Integrations</strong>.</li>
@@ -562,14 +625,14 @@
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 300px;">
                     <strong>Request Body</strong>
-<pre><code>{
+<pre><code class="language-json">{
   "bot_username": "@my_awesome_bot",
   "user_id": 123456789
 }</code></pre>
                 </div>
                 <div style="flex: 1; min-width: 300px;">
                     <strong>Success Response (200 OK)</strong>
-<pre><code>{
+<pre><code class="language-json">{
   "status": "ok",
   "bot": "@my_awesome_bot",
   "user_id": 123456789
@@ -578,7 +641,7 @@
             </div>
 
             <h4>Example Implementation (Python)</h4>
-<pre><code>import requests
+<pre><code class="language-python">import requests
 
 def sync_user_to_dashboard(user_id, bot_username):
     url = "https://botfusion.onrender.com/autoup"
@@ -603,7 +666,7 @@ def sync_user_to_dashboard(user_id, bot_username):
 
             <div id="anomaly-architecture" class="sub-section">
                 <h3>Typical Integration Architecture</h3>
-<pre><code>Telegram Group
+<pre><code class="language-text">Telegram Group
       ↓
 Moderation Bot (Your Code)
       ↓  (Records activity)
@@ -620,7 +683,7 @@ Admin Alerts / Auto-Ban Logic</code></pre>
 
                 <h4>1. Event Collection</h4>
                 <p>Your bot should record user activity locally. Keep the structure minimal to reduce your database overhead:</p>
-<pre><code>event = {
+<pre><code class="language-json">event = {
     "chat_id": -100123456,
     "timestamp": 1769401000,
     "text": "Hello everyone",
@@ -648,7 +711,7 @@ Admin Alerts / Auto-Ban Logic</code></pre>
                 <p><em>Uses the same headers as the AutoUp API (Requires <code>X-CONNECTION-KEY</code>).</em></p>
 
                 <h4>Request Body Format</h4>
-<pre><code>{
+<pre><code class="language-json">{
   "user_id": 4021189931,
   "events": [
     {
@@ -662,7 +725,7 @@ Admin Alerts / Auto-Ban Logic</code></pre>
 }</code></pre>
 
                 <h4>Response & Interpretation</h4>
-<pre><code>{
+<pre><code class="language-json">{
   "user_id": 4021189931,
   "anomaly_score": 0.67,
   "risk_level": "HIGH",
@@ -885,7 +948,7 @@ Admin Alerts / Auto-Ban Logic</code></pre>
                 <ul>
                     <li><strong>Header:</strong> <code>Content-Type: application/json</code></li>
                 </ul>
-<pre><code>{
+<pre><code class="language-json">{
   "data": "https://botfusion.wuaze.com",
   "telegram_url": "https://api.telegram.org/file/bot789/photos/file_1.jpg",
   "dot_style": "rounded",
